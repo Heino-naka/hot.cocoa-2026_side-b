@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>学生レポート＆アフタートーク｜森でほっとココア vol.3</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* ===== Reset & Base ===== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --forest-deep: #1E2E20;
+      --forest: #2C3E2D;
+      --forest-light: #3A5240;
+      --cocoa: #5C3D2E;
+      --cocoa-light: #7A5544;
+      --amber: #D4853B;
+      --amber-soft: #E8A86D;
+      --cream: #FDF6EC;
+      --cream-warm: #F8EDD8;
+      --cream-dark: #EDE0CC;
+      --text-dark: #2A2118;
+      --text-body: #3E332A;
+      --text-light: #6B5D52;
+      --text-on-dark: #F0E6D8;
+      --border-soft: rgba(92, 61, 46, 0.12);
+      --shadow-warm: rgba(92, 61, 46, 0.08);
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 400;
+      color: var(--text-body);
+      background-color: var(--cream);
+      line-height: 1.9;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ===== Utility ===== */
+    .container {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .accent { color: var(--amber); }
+
+    /* ===== Fade-in Animation ===== */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== Texture overlay on body ===== */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ===== Hero Section ===== */
+    .hero {
+      position: relative;
+      background: linear-gradient(170deg, var(--forest-deep) 0%, var(--forest) 50%, var(--cocoa) 100%);
+      padding: 80px 24px 60px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 80%, rgba(212, 133, 59, 0.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      color: var(--amber-soft);
+      border: 1px solid rgba(212, 133, 59, 0.35);
+      border-radius: 20px;
+      padding: 6px 20px;
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .hero-event-title {
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: rgba(240, 230, 216, 0.7);
+      margin-bottom: 12px;
+      letter-spacing: 0.08em;
+    }
+
+    .hero-title {
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-size: clamp(1.5rem, 5vw, 2.2rem);
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1.5;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .hero-sub {
+      font-size: 0.85rem;
+      color: rgba(240, 230, 216, 0.6);
+      line-height: 1.8;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    /* Floating ember particles */
+    .ember {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: var(--amber);
+      border-radius: 50%;
+      opacity: 0;
+      animation: float-ember 4s ease-in-out infinite;
+    }
+    .ember:nth-child(1) { left: 20%; bottom: 10%; animation-delay: 0s; animation-duration: 3.5s; }
+    .ember:nth-child(2) { left: 50%; bottom: 5%; animation-delay: 1.2s; animation-duration: 4.2s; }
+    .ember:nth-child(3) { left: 75%; bottom: 8%; animation-delay: 0.6s; animation-duration: 3.8s; }
+    .ember:nth-child(4) { left: 35%; bottom: 15%; animation-delay: 2s; animation-duration: 4.5s; width: 3px; height: 3px; }
+    .ember:nth-child(5) { left: 65%; bottom: 12%; animation-delay: 1.5s; animation-duration: 3.2s; width: 3px; height: 3px; }
+
+    @keyframes float-ember {
+      0% { opacity: 0; transform: translateY(0) scale(1); }
+      20% { opacity: 0.8; }
+      100% { opacity: 0; transform: translateY(-120px) scale(0.3); }
+    }
+
+    /* ===== Intro Letter ===== */
+    .intro {
+      padding: 64px 0 48px;
+    }
+
+    .intro-letter {
+      background: white;
+      border-radius: 12px;
+      padding: 40px 32px;
+      box-shadow: 0 2px 20px var(--shadow-warm);
+      border: 1px solid var(--border-soft);
+      position: relative;
+    }
+
+    .intro-letter::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 32px;
+      right: 32px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--amber), var(--cocoa-light), var(--amber));
+      border-radius: 0 0 2px 2px;
+    }
+
+    .intro-from {
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-size: 0.8rem;
+      color: var(--text-light);
+      margin-bottom: 16px;
+    }
+
+    .intro-text {
+      font-size: 0.95rem;
+      line-height: 2;
+      color: var(--text-body);
+    }
+
+    .intro-text p + p {
+      margin-top: 1.5em;
+    }
+
+    .intro-sign {
+      margin-top: 24px;
+      text-align: right;
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-size: 0.9rem;
+      color: var(--cocoa);
+    }
+
+    /* ===== Section Divider ===== */
+    .divider {
+      text-align: center;
+      padding: 20px 0;
+    }
+    .divider-dots {
+      display: inline-flex;
+      gap: 8px;
+    }
+    .divider-dots span {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--amber-soft);
+      opacity: 0.5;
+    }
+
+    /* ===== Section Headers ===== */
+    .section-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--amber);
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-size: clamp(1.3rem, 4vw, 1.7rem);
+      font-weight: 700;
+      color: var(--text-dark);
+      line-height: 1.5;
+    }
+
+    /* ===== Student Reports ===== */
+    .reports {
+      padding: 40px 0 64px;
+    }
+
+    .report-card {
+      background: white;
+      border-radius: 12px;
+      padding: 36px 28px;
+      margin-bottom: 28px;
+      box-shadow: 0 2px 16px var(--shadow-warm);
+      border: 1px solid var(--border-soft);
+      position: relative;
+    }
+
+    .report-card::after {
+      content: '';
+      position: absolute;
+      left: 28px;
+      top: 0;
+      width: 32px;
+      height: 3px;
+      background: var(--amber);
+      border-radius: 0 0 2px 2px;
+    }
+
+    .report-name {
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--cocoa);
+      margin-bottom: 4px;
+    }
+
+    .report-attr {
+      font-size: 0.78rem;
+      color: var(--text-light);
+      margin-bottom: 20px;
+    }
+
+    .report-body {
+      font-size: 0.92rem;
+      line-height: 2;
+      color: var(--text-body);
+    }
+
+    .report-body p + p {
+      margin-top: 1.5em;
+    }
+
+    /* ===== Photo Insert ===== */
+    .photo-insert {
+      margin: 48px 0;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+      cursor: pointer;
+    }
+
+    .photo-insert img {
+      width: 100%;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .photo-insert:hover img {
+      transform: scale(1.02);
+    }
+
+    .photo-caption {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--text-light);
+      margin-top: 10px;
+      padding: 0 12px;
+    }
+
+    /* ===== After Talk Video ===== */
+    .aftertalk {
+      background: linear-gradient(175deg, var(--forest-deep) 0%, var(--cocoa) 100%);
+      padding: 64px 0;
+      position: relative;
+    }
+
+    .aftertalk .section-label {
+      color: var(--amber-soft);
+    }
+
+    .aftertalk .section-title {
+      color: var(--cream);
+    }
+
+    .aftertalk .section-header {
+      margin-bottom: 12px;
+    }
+
+    .aftertalk-desc {
+      text-align: center;
+      font-size: 0.88rem;
+      color: rgba(240, 230, 216, 0.7);
+      margin-bottom: 36px;
+      line-height: 1.9;
+    }
+
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+    }
+
+    .video-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* ===== CFA Images (Crowdfunding Art) ===== */
+    .cfa-images {
+      padding: 56px 0;
+    }
+
+    .cfa-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .cfa-grid .photo-insert {
+      margin: 0;
+    }
+
+    .cfa-text {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-light);
+      margin-top: 20px;
+      line-height: 1.9;
+    }
+
+    /* ===== Group Photo ===== */
+    .group-photo-section {
+      padding: 0 0 56px;
+    }
+
+    .group-photo-wrap {
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 6px 32px rgba(0,0,0,0.12);
+      cursor: pointer;
+    }
+
+    .group-photo-wrap img {
+      width: 100%;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .group-photo-wrap:hover img {
+      transform: scale(1.02);
+    }
+
+    /* ===== Closing ===== */
+    .closing {
+      padding: 48px 0 80px;
+    }
+
+    .closing-inner {
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .closing-emoji {
+      font-size: 2rem;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .closing-text {
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-size: 1rem;
+      color: var(--text-body);
+      line-height: 2;
+    }
+
+    .closing-text p {
+      padding-left: 4em;
+    }
+
+    .closing-text p + p {
+      margin-top: 1.5em;
+    }
+
+    .closing-sign {
+      margin-top: 28px;
+      text-align: right;
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-size: 0.85rem;
+      color: var(--cocoa);
+    }
+
+    .closing-link {
+      display: inline-block;
+      margin-top: 32px;
+      font-size: 0.82rem;
+      color: var(--amber);
+      text-decoration: none;
+      border: 1px solid var(--amber);
+      border-radius: 24px;
+      padding: 10px 28px;
+      transition: all 0.3s ease;
+    }
+
+    .closing-link:hover {
+      background: var(--amber);
+      color: white;
+    }
+
+    /* ===== Footer ===== */
+    footer {
+      background: var(--forest-deep);
+      padding: 28px 24px;
+      text-align: center;
+    }
+
+    footer p {
+      font-size: 0.72rem;
+      color: rgba(240, 230, 216, 0.35);
+      letter-spacing: 0.05em;
+    }
+
+    /* ===== Lightbox ===== */
+    .lightbox-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.92);
+      z-index: 10000;
+      cursor: pointer;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+    }
+
+    .lightbox-overlay.active {
+      display: flex;
+    }
+
+    .lightbox-overlay img {
+      max-width: 100%;
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      color: white;
+      font-size: 2rem;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+      line-height: 1;
+      z-index: 10001;
+    }
+
+    .lightbox-close:hover { opacity: 1; }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 600px) {
+      .hero { padding: 60px 20px 48px; }
+      .intro-letter { padding: 28px 20px; }
+      .report-card { padding: 28px 20px; }
+      .report-card::after { left: 20px; }
+      .cfa-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== HERO ===== -->
+  <header class="hero">
+    <div class="ember"></div>
+    <div class="ember"></div>
+    <div class="ember"></div>
+    <div class="ember"></div>
+    <div class="ember"></div>
+
+    <div class="hero-badge">支援者限定ページ</div>
+    <p class="hero-event-title">森でほっとココア vol.3</p>
+    <h1 class="hero-title">学生レポート<span class="accent">＆</span>アフタートーク</h1>
+    <p class="hero-sub">「教育を志す学生のパトロンになる」「学生のガソリン代を支援する」をご支援くださった方への、お礼の記録です。</p>
+  </header>
+
+  <!-- ===== INTRO LETTER ===== -->
+  <section class="intro">
+    <div class="container">
+      <div class="intro-letter fade-in">
+        <p class="intro-from">支援者のみなさまへ</p>
+        <div class="intro-text">
+          <p>ご支援、本当にありがとうございました。みなさまのおかげで、教育を志す学生たちが「学生サポーター」としてイベントに参加することができました。</p>
+          <p>このページでは、参加した学生たちが書いたレポートと、イベント後に学生たちと行ったアフタートークの動画をお届けします。学生たちの生の言葉から、みなさまの支援がどんな学びにつながったのか、感じていただけたら嬉しいです。</p>
+        </div>
+        <p class="intro-sign">へいなか</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="divider-dots"><span></span><span></span><span></span></div></div>
+
+  <!-- ===== STUDENT REPORTS ===== -->
+  <section class="reports">
+    <div class="container">
+      <div class="section-header fade-in">
+        <p class="section-label">Student Reports</p>
+        <h2 class="section-title">学生サポーターの<span class="accent">レポート</span></h2>
+      </div>
+
+      <!-- しょうご -->
+      <article class="report-card fade-in">
+        <p class="report-name">しょうご</p>
+        <p class="report-attr">茨城大学4年</p>
+        <div class="report-body">
+          <p>今回の学生サポーターの参加目的として、「児童養護施設の子どもたちがどんな子どもたちなのか知りたい」という思いがありました。</p>
+          <p>実際に参加してみて感じたことは、しっかりと明るく子どもらしく生きているということでした。</p>
+          <p>少なくとも1/25に見た限りでは、児童養護施設に住んでいるということは聞かない限りわからないように思いました。 むしろ子ども間でも、引率してきた先生とも、年齢さえ超えた信頼関係が築かれていることを感じました。</p>
+          <p>初対面の私にも、ポトフの材料をとりにいくのを後回しにしていたら、「とりにいっていいですよ」など声をかけてくれました。</p>
+          <p>また、学生サポーターの別の参加目的として、たき火でどんな活動をするのか興味があったのもありました。巨大な薪を運んだり、森の中を駆け回ったり、焼きマシュマロや焼きソーセージをつくったり、ポトフを煮たり、これらは普段の学校では経験できない、けれど確実に幼少期に経験することが望ましいものだと感じました。</p>
+          <p>今回は参加させていただき、誠にありがとうございました。</p>
+        </div>
+      </article>
+
+      <!-- Photo insert: forest scene with stove -->
+      <div class="photo-insert fade-in" onclick="openLightbox(this)">
+        <img src="images/cocoa2026b_1.jpeg" alt="森の中のロケットストーブとやかん。冬の森で活動の準備をする参加者たち。">
+      </div>
+
+      <!-- なるみ -->
+      <article class="report-card fade-in">
+        <p class="report-name">なるみ</p>
+        <p class="report-attr">茨城大学3年</p>
+        <div class="report-body">
+          <p>昨年に引き続き「森でほっとココア」に参加させていただき、昨年とは違い、子どもたちのその場での様子だけでなく1年での変化にも目を向けることができ、大変貴重な経験となりました。</p>
+          <p>昨年同じグループだった子や、一緒に遊んだ子が「去年もいたよね！」と声をかけてくれたことがとても印象に残っており、再会を通して子どもたちの成長を感じることができました。</p>
+          <p>また、子どもたちと関わる中で見られた子どもたちの振る舞いや反応から、振り返りの際に安部先生がお話しされていた「施設の子らしさ」を実感する場面もありました。</p>
+          <p>この経験を通して、今後様々な背景を持つ子どもたちと関わる際に、一人ひとりを理解し、その子に合ったかかわり方をすることの重要性を再認識しました。</p>
+          <p>また来年も参加させていただきたく思います。ありがとうございました。</p>
+        </div>
+      </article>
+
+      <!-- みゆ -->
+      <article class="report-card fade-in">
+        <p class="report-name">みゆ</p>
+        <p class="report-attr">常磐大学</p>
+        <div class="report-body">
+          <p>当日を迎えるにあたって緊張が大きかったのですが、スタッフの皆さんの雰囲気や、子供たちが明るく話しかけてくれたことに救われました。</p>
+          <p>初対面の私にも積極的に明るく話しかけてくれる子が多かったのは、これまでのイベントが、子供たちにとってあたたかく安心できるものであったからなのかな、と思いました。</p>
+          <p>子供たちとかかわる中で、どのように会話を広げようか、話しかけていいのか迷うことや、楽しんでくれているのか不安に思うことが多かったのですが、私自身もこのイベントに少しでも貢献できていたら、子供たちの記憶に良い思い出を残せていたら良いなと思います。</p>
+          <p>また、スタッフとして参加されていた社会人の方や学生の方を見たり、振り返りでの感想を聞いたりする中で、皆さんがどのようなスタンスで参加されていたのか、どのような視点で子供たちを見ていたのかを知り、とても勉強になりました。</p>
+        </div>
+      </article>
+
+      <!-- Photo insert: talking in forest -->
+      <div class="photo-insert fade-in" onclick="openLightbox(this)">
+        <img src="images/cocoa2026b_2.jpeg" alt="冬の森の中で会話をする参加者たち。東屋のそばで和やかに談笑している。">
+      </div>
+
+      <!-- そうた -->
+      <article class="report-card fade-in">
+        <p class="report-name">そうた</p>
+        <p class="report-attr">常磐大学</p>
+        <div class="report-body">
+          <p>3年連続で参加しました。3年目で感じたことは、施設の子どもたちが1年目、2年目と比べて良い方向に成長しているということです。特に印象に残っているのは、昨年はコミュニケーションを取ることが得意ではなかった子が、今年は積極的に周りとコミュニケーションを取っていたことです。</p>
+          <p>自分はこのイベント以外で児童養護施設の子どもたちと関わる機会がありませんが、イベントを通じて、子どもたちが成長している姿だけでなく、純粋に楽しんでいる姿を見ることができます。その姿に触れることで、自分自身も停滞した気持ちのままではいけないと、前向きな気持ちになることができています。</p>
+          <p>来年度からは学生ではなく社会人になりますが、社会に出てからも、子どもたちと接して得た経験を活かしながら活躍できる人間になりたいと思います。</p>
+        </div>
+      </article>
+
+      <!-- まさ -->
+      <article class="report-card fade-in">
+        <p class="report-name">まさ</p>
+        <p class="report-attr">茨城大学3年</p>
+        <div class="report-body">
+          <p>今回三年目を迎え、また学ばせていただきました。子どもたちの好奇心や向上心を伸ばすために私たちの教えを押し付けすぎないことを、改めて学びました。</p>
+          <p>わかっていたつもりではありましたが、今回は自分でも実践できたと思います。あれやりたくないこれやりたくないという子に対して、樹学園の先生方や友だちからはやろうよという言葉をかけられていて、それだけでは動かずアプローチを変えてみました。「何をやりたい？」その言葉で目を輝かせてくれました。私の中でのとても貴重な経験です。他にも多くのことを学びましたが、ここではこの一例だけにさせていただきます。</p>
+          <p>こどもたちとの関わりをしていると相手は覚えてくれていたし、それがとてもうれしくなりました。この嬉しさは教員のやりがいでもあるなと感じ、教員を目指す志がまた高まりました。来年もぜひ学生サポーターとしてやらせていただきたいと思いますので、僕自身もたくさんの経験をつみ、この森に帰ってこようと思います。ありがとうございました。</p>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ===== GROUP PHOTO ===== -->
+  <section class="group-photo-section">
+    <div class="container">
+      <div class="group-photo-wrap fade-in" onclick="openLightbox(this)">
+        <img src="images/cocoa2026b_3.jpg" alt="森でほっとココア vol.3 参加メンバーの集合写真。笑顔でピースサインをしている。">
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="divider-dots"><span></span><span></span><span></span></div></div>
+
+  <!-- ===== AFTER TALK VIDEO ===== -->
+  <section class="aftertalk">
+    <div class="container">
+      <div class="section-header fade-in">
+        <p class="section-label">After Talk</p>
+        <h2 class="section-title">アフタートーク</h2>
+      </div>
+      <p class="aftertalk-desc fade-in">イベント終了後、学生サポーターたちと振り返りを行いました。<br>レポートには書ききれなかった思いや、その場で生まれた対話の記録です。</p>
+      <div class="video-wrapper fade-in">
+        <iframe src="https://www.youtube.com/embed/bTST_-JMbZQ" title="森でほっとココア vol.3 アフタートーク" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CFA IMAGES ===== -->
+  <section class="cfa-images">
+    <div class="container">
+      <div class="section-header fade-in">
+        <p class="section-label">Your Support</p>
+        <h2 class="section-title">ご支援いただいた<span class="accent">リターン</span></h2>
+      </div>
+      <div class="cfa-grid fade-in">
+        <div class="photo-insert" onclick="openLightbox(this)">
+          <img src="images/cocoa2026b_00.png" alt="クラウドファンディングリターン：教育を志す学生のパトロンになる">
+        </div>
+        <div class="photo-insert" onclick="openLightbox(this)">
+          <img src="images/cocoa2026b_01.png" alt="クラウドファンディングリターン：学生のガソリン代を支援する">
+        </div>
+      </div>
+      <p class="cfa-text fade-in">みなさまのご支援が、学生たちの参加を支えました。</p>
+    </div>
+  </section>
+
+  <!-- ===== CLOSING ===== -->
+  <section class="closing">
+    <div class="container fade-in">
+      <div class="closing-inner">
+        <p class="closing-emoji">☕</p>
+        <div class="closing-text">
+          <p>学生たちのレポートを読んでいただき<br>ありがとうございました。</p>
+          <p>みなさまの支援があったからこそ<br>学生たちはこの場に立つことができました。</p>
+          <p>この経験はきっと…これからの彼らの<br>糧になっていくと思います。</p>
+          <p>引き続き、見守っていただけたら嬉しいです。</p>
+        </div>
+        <p class="closing-sign">へいなか</p>
+        <div style="text-align:center;">
+          <a href="https://for-good.net/project/1003058" target="_blank" rel="noopener" class="closing-link">vol.3 クラファンページを見る</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <p>森でほっとココア vol.3 ── 支援者限定ページ</p>
+  </footer>
+
+  <!-- ===== LIGHTBOX ===== -->
+  <div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
+    <span class="lightbox-close">&times;</span>
+    <img src="" alt="" id="lightbox-img">
+  </div>
+
+  <script>
+    // Fade-in on scroll
+    const fadeEls = document.querySelectorAll('.fade-in');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    fadeEls.forEach(el => observer.observe(el));
+
+    // Lightbox
+    function openLightbox(el) {
+      const img = el.querySelector('img');
+      if (!img) return;
+      const lb = document.getElementById('lightbox');
+      const lbImg = document.getElementById('lightbox-img');
+      lbImg.src = img.src;
+      lbImg.alt = img.alt;
+      lb.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+  </script>
+</body>
+</html>
